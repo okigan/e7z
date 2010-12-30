@@ -19,6 +19,7 @@ done
 
 echo command=$command
 echo key=$key
+encryptedPasswordFile=archivePassword.ssl
 
 archiveCommand=/usr/bin/7z
 
@@ -31,13 +32,22 @@ case $command in
 		echo "Archive password: $archivePassword"
 
 		# openssl rsa -in .ssh/id_rsa  -pubout -outform PEM > key.pub
-		encryptedPasswordFile=/tmp/archivePassword.ssl
 		echo $archivePassword | openssl rsautl -encrypt -inkey $key -pubin -out $encryptedPasswordFile
-		#trap rm -f /tmp/archivePassword.ssl
+		trap "rm -f $encryptedPasswordFile" EXIT
 		$archiveCommand a $output $encryptedPasswordFile
 		$archiveCommand u -p$archivePassword $output $input
 		;;
 	x)
+		input=*.txt
+		output=test.7z
+
+		$archiveCommand e $output $encryptedPasswordFile
+		trap "rm -f $encryptedPasswordFile" EXIT
+		archivePassword=`openssl rsautl -decrypt -inkey $key -in $encryptedPasswordFile`
+		echo "Archive password: $archivePassword"
+
+		$archiveCommand x -p$archivePassword $output
+
 		;;
 esac
 
