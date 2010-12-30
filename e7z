@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+archiveCommand=/usr/bin/7z
+input=*.txt
+output=test.7z
+publicKey=testkey.pub
+
+archivePassword=`makepasswd --chars=10`
+echo $archivePassword
+
+# openssl rsa -in .ssh/id_rsa  -pubout -outform PEM > key.pub
+echo openssl rsautl -encrypt -inkey $publicKey -pubin -out archivePassword.ssl
+echo $archivePassword | openssl rsautl -encrypt -inkey $publicKey -pubin -out archivePassword.ssl
+
+$archiveCommand a $output archivePassword.ssl
+$archiveCommand u -p$archivePassword $output $input
+
