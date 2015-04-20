@@ -42,6 +42,8 @@ echo arguments=$arguments
 
 encryptedPasswordFile=archivePassword.ssl
 
+set -x
+set -e
 
 case $command in
 	a)
@@ -49,7 +51,7 @@ case $command in
 		echo "Archive password: $archivePassword"
 
 		echo $archivePassword | \
-			openssl rsautl -encrypt -inkey $key -pubin | \
+			openssl rsautl -encrypt -inkey $key | \
 			$archiveCommand $command $archive -si$encryptedPasswordFile
 
 		$archiveCommand u $archive -p$archivePassword $arguments

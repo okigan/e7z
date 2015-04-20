@@ -8,7 +8,7 @@ usage of public/private keys to safeguard the content.
 Usage:
 
 Create archive:
-e7z a -k id_rsa.pub.ssl archive.7z input_file
+e7z -k id_rsa.pub.ssl a archive.7z input_file
 
 Extract:
-e7z x -k id_rsa archive.7z 
+e7z  -k id_rsa x archive.7z 
