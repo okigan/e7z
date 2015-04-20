@@ -31,19 +31,15 @@ case $command in
 		archivePassword=`makepasswd --chars=30`
 		echo "Archive password: $archivePassword"
 
-		# openssl rsa -in .ssh/id_rsa  -pubout -outform PEM > key.pub
-		echo $archivePassword | openssl rsautl -encrypt -inkey $key -pubin -out $encryptedPasswordFile
-		trap "rm -f $encryptedPasswordFile" EXIT
-		$archiveCommand a $output $encryptedPasswordFile
+		openssl rsautl -encrypt -inkey $key -pubin | $archiveCommand a $output -is$encryptedPasswordFile
 		$archiveCommand u -p$archivePassword $output $input
+
 		;;
 	x)
 		input=*.txt
 		output=test.7z
 
-		$archiveCommand e $output $encryptedPasswordFile
-		trap "rm -f $encryptedPasswordFile" EXIT
-		archivePassword=`openssl rsautl -decrypt -inkey $key -in $encryptedPasswordFile`
+		archivePassword=`$archiveCommand e $output $encryptedPasswordFile -so | openssl rsautl -decrypt -inkey $key -in $encryptedPasswordFile`
 		echo "Archive password: $archivePassword"
 
 		$archiveCommand x -p$archivePassword $output
