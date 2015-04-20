@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 archiveCommand=7z
 
 key=

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-./e7z -k id_rsa.pub.ssl a archive.7z README
+set -x
+
+./e7z -k id_rsa.pub.ssl a archive.7z README.md
 ./e7z -k id_rsa x archive.7z -o/tmp
-diff README /tmp/README
+diff README.md /tmp/README.md
 
