@@ -51,7 +51,7 @@ case $command in
 		echo "Archive password: $archivePassword"
 
 		echo $archivePassword | \
-			openssl rsautl -encrypt -inkey $key | \
+			openssl rsautl -encrypt -inkey $key -pubin | \
 			$archiveCommand $command $archive -si$encryptedPasswordFile
 
 		$archiveCommand u $archive -p$archivePassword $arguments

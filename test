@@ -1,9 +1,0 @@
-#!/bin/bash
-
-set -x
-set -e
-
-./e7z -k id_rsa a archive.7z README.md
-./e7z -k id_rsa x archive.7z -o/tmp
-diff README.md /tmp/README.md
-
